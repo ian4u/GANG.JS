@@ -14,6 +14,7 @@ const readline = require('readline');
 
 const colors = {
     reset: '\x1b[0m',
+    purple: '\x1b[35m',
     white: '\x1b[37m',
     black: '\x1b[30m',
     red: '\x1b[91m',
@@ -739,5 +740,6 @@ module.exports = {
     proxy_scrape: proxy_scrape,
     LOGO: LOGO,
     input: input,
-    sleep: sleep
+    sleep: sleep,
+    colors: colors
 }
