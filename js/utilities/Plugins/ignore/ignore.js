@@ -1,1 +1,0 @@
-console.log("ignore \nAlso love to ††#3249 for the support <3.")
