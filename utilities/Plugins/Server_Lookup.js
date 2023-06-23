@@ -11,12 +11,11 @@ async function menu() {
   return x;
 }
 
-async function Lookup() {
+async function Lookup(token) {
   var option = await menu();
   if (option == "1") {
     const file = await input(colors.lightYellow + "Do you want a server lookup data file Y\\N: " + colors.reset);
     console.log(colors.red + "Please note that the token must be in the server, to get the server information." + colors.reset);
-    const token = await input(colors.purple + "Token : " + colors.reset);
     var x = await validateToken(token);
     if (await x === undefined) {return;}
     getheaders(token)

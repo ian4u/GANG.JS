@@ -444,7 +444,7 @@ function input(message) {
   });
 
   return new Promise((resolve, reject) => {
-    rl.question(message, (answer) => {
+    rl.question(colors.purple+message+colors.reset, (answer) => {
       rl.close();
       resolve(answer);
     });
@@ -723,13 +723,20 @@ function proxy() {
 
 function LOGO() {
   return new Promise((resolve) => {
-    figlet.text("GANG.JS", function (err, result) {
-      if (err) {
-        console.log(err);
-      }
-      console.log("\n" + result + "\n\tJS: For4#3043 - PY: ††#3249");
+    const result = 
+`
+                 _______  _______  __    _  _______            ___  _______ 
+                |       ||   _   ||  |  | ||       |          |   ||       |
+                |    ___||  |_|  ||   |_| ||    ___|          |   ||  _____|
+                |   | __ |       ||       ||   | __           |   || |_____ 
+                |   ||  ||       ||  _    ||   ||  | ___   ___|   ||_____  |
+                |   |_| ||   _   || | |   ||   |_| ||   | |       | _____| |
+                |_______||__| |__||_|  |__||_______||___| |_______||_______|
+          
+                              JS: For4#3043 - PY: ††#3249
+ `
+      console.log("\n"+ colors.purple+ result+ colors.reset);
       resolve();
-    });
   });
 }
 
