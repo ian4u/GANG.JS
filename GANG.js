@@ -20,19 +20,21 @@ async function MAIN() {
     colors.purple+`
     ◢================================================================================◣
     ⫴  [1] Account Nuker || [2] DM Deleter || [3] Server Lookup || [4] Token Changer  ⫴
-    ⫴  [5] Token Checker || [6] Token Info || [7] EXIT          || [8] Discord        ⫴
+    ⫴  [5] Token Checker || [6] Token Info || [8] Discord       || [7] EXIT           ⫴
     ◥================================================================================◤
     `+colors.reset
     console.log(interface)
     var user_in = await input("Choice >")
     switch (user_in) {
         case "1":
+            await clear()
             const servername = await input("Server Spam Name > ")
             const token = await input("Token > ")
             const spammessage = await input("Spam Message > ")
             await GANGDOTJS_START(token,servername,spammessage)
-            MAIN()
+            await MAIN()
         case "2":
+            await clear()
             const token2 = await input("Token > ")
             getheaders(token2).then((headers) => {
                 const channelids = request.get({uri:"https://discord.com/api/v9/users/@me/channels", headers:headers, json:true})
@@ -45,8 +47,10 @@ async function MAIN() {
             await clear()
             await MAIN()
         case "3":
+            await clear()
             const token3 = await input("Token > ")
-            await Lookup(token3)
+            const serverid = await input("Server ID > ")
+            await Lookup(token3, serverid)
             await clear()
             await MAIN()
         case "4":
@@ -55,6 +59,7 @@ async function MAIN() {
             await clear()
             await MAIN()
         case "5":
+            await clear()
             const file = fs.readFileSync("token.txt", "utf-8").split("\n");
             for(const token of file) {
                 console.log(await validateToken(token));
@@ -62,13 +67,17 @@ async function MAIN() {
             await clear()
             await MAIN()
         case "6":
+            await clear()
             const token5 = await input("Token > ")
             await Info(token5)
             await clear()
             await MAIN()
         case "7":
+            await clear()
             process.exit()
         case "8":
+            await clear()
+            console.log(colors.purple+"Thanks for joining my discord server! <3"+colors.reset)
             request.get("https://raw.githubusercontent.com/ian4u/GANG.JS/main/discord.txt", function(error,responce,body) {
                 if(error) {console.log(error)}
                 const link = body.split("\n")[0]
@@ -78,7 +87,7 @@ async function MAIN() {
             await MAIN()
         default:
             await clear()
-            break;
+            await MAIN()
     }
 }
 

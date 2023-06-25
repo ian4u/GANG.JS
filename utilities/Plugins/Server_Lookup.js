@@ -11,9 +11,7 @@ async function menu() {
   return x;
 }
 
-async function Lookup(token) {
-  var option = await menu();
-  if (option == "1") {
+async function Lookup(token,serverid) {
     const file = await input(colors.lightYellow + "Do you want a server lookup data file Y\\N: " + colors.reset);
     console.log(colors.red + "Please note that the token must be in the server, to get the server information." + colors.reset);
     var x = await validateToken(token);
@@ -22,7 +20,7 @@ async function Lookup(token) {
       .then((headers_) => {
         const headers = headers_;
         (async () => {
-          const guildid = await input(colors.purple + "Server ID: " + colors.reset);
+          const guildid = serverid;
           request.get(
             {
               uri: `https://discord.com/api/guilds/${guildid}`,
@@ -47,18 +45,46 @@ async function Lookup(token) {
                         if (error2) {
                           console.log(error2);
                         } else {
-                          clear()
                           const owner = JSON.parse(body2);
+                          clear()
+                          const Server_roles = []
+                          const Owner_roles = []
+                          let emoji_count = 0
+                          for (const role in server.roles) {
+                            Server_roles.push(server.roles[role].name + "\t | " + server.roles[role].id + "\t | Pingable: " + server.roles[role].mentionable);
+                            if (owner.roles.includes(server.roles[role].id)) {
+                              Owner_roles.push(server.roles[role].name + " | " + server.roles[role].id);
+                            }
+                          }
+                          for(emoji of server.emojis) {
+                            if(emoji) {
+                              emoji_count++
+                            }
+                          }                 
                           const info =
 colors.purple +
 `
-[Server Name] : (${server.name})
-[Server ID]   : (${server.id})
-[Owner Name]  : (${owner.user.username + "#" + owner.user.discriminator})
-[Owner ID]    : (${owner.user.id})
-[Members]     : (${server.approximate_member_count})
-[Region]      : (${server.region})
-[Icon URL]    : (https://cdn.discordapp.com/icons/${guildid}/${server.icon}.webp?size=256)
+####### OWNER INFO #######
+[Owner Name]        : (${owner.user.username})
+[In Server Name]    : (${owner.user.global_name})
+[Owner ID]          : (${owner.user.id})
+[Is Muted]          : (${owner.mute})
+[Is Deafened]       : (${owner.deaf})
+[Joined/Created At] : (${owner.joined_at})
+[Has Roles]         : (${Boolean(owner.roles.length > 0)})
+[Role Id's]         : (${Owner_roles.join(", ")})
+[Has Costume PFP]   : (${Boolean(owner.avatar !== null)})
+[Boster since]      : (${Boolean(owner.premium_since)})
+
+####### SERVER LOOKUP INFO #######
+[Server Name]    : (${server.name})
+[Server ID]      : (${server.id})
+[Members]        : (${server.approximate_member_count})
+[Online Members] : (~${server.approximate_presence_count})
+[Region]         : (${server.region})
+[Server Emoji's] : (${emoji_count})
+[Icon URL]       : (https://cdn.discordapp.com/icons/${guildid}/${server.icon}.webp?size=256)
+[Server Roles]   : \n${Server_roles.join("\n")}
 ` +
 colors.reset;
                           console.log(info);
@@ -70,7 +96,7 @@ colors.reset;
                               if (err) {
                                 console.log(err);
                               } else {
-                                console.log(colors.lightGreen + "Server lookup data file saved!" + colors.reset);
+                                console.log(colors.lightGreen + "Server lookup data file saved!\nPRESS ENETER TO CONTINUE." + colors.reset);
                               }
                             });
                           } else {
@@ -88,9 +114,6 @@ colors.reset;
       .catch((error) => {
         console.log(error);
       });
-  } else {
-    return;
-  }
 };
 
 module.exports = { Lookup: Lookup };

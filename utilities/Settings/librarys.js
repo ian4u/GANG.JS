@@ -11,8 +11,7 @@ const readline = require("readline")
 
 //######### INSTALL FUNCTION #######//
 
-function downloadPackages() {
-    const package = packages.shift();
+function downloadPackages(package) {
     if (package) {
         console.log(`Downloading ${package}...`);
         exec(`npm install ${package}`, (error, stdout, stderr) => {
@@ -21,7 +20,6 @@ function downloadPackages() {
             } else {
                 console.log(`${package} downloaded successfully.`);
             }
-            downloadPackages();
         });
     } else {
         console.log('All packages downloaded.');
