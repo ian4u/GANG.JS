@@ -3,14 +3,6 @@ const request = require("request");
 const { input, getheaders, colors, clear, setTitle, validateToken } = require("../Settings/common");
 const fs = require("fs");
 
-async function menu() {
-  await setTitle("SERVER LOOKUP");
-  await clear();
-  console.log(colors.purple + "> [1] Server lookup\n> [2] Exit" + colors.reset);
-  var x = await input("\n> Choice: ");
-  return x;
-}
-
 async function Lookup(token,serverid) {
     const file = await input(colors.lightYellow + "Do you want a server lookup data file Y\\N: " + colors.reset);
     console.log(colors.red + "Please note that the token must be in the server, to get the server information." + colors.reset);
@@ -51,7 +43,10 @@ async function Lookup(token,serverid) {
                           const Owner_roles = []
                           let emoji_count = 0
                           for (const role in server.roles) {
-                            Server_roles.push(server.roles[role].name + "\t | " + server.roles[role].id + "\t | Pingable: " + server.roles[role].mentionable);
+                            let mention;
+                            if (server.roles[role].mentionable === false) {mention = colors.red + "false" + colors.purple} else if (server.roles[role].mentionable === true) {mention = colors.green + "true" + colors.purple} else {mention = colors.yellow + "undefined" + colors.purple}
+                            const data = ("("+server.roles[role].name+")").padEnd(50) + " | " + colors.reset + server.roles[role].id + colors.purple + " | Pingable: " + mention;
+                            Server_roles.push(data);
                             if (owner.roles.includes(server.roles[role].id)) {
                               Owner_roles.push(server.roles[role].name + " | " + server.roles[role].id);
                             }
@@ -88,6 +83,7 @@ colors.purple +
 ` +
 colors.reset;
                           console.log(info);
+                          input(colors.lightGreen + "Press ENTER to continue." + colors.reset);
                           if (file.toLowerCase() === "y") {
                             const filePath = `data/${server.name}_data.json`;
                             const data = JSON.stringify({ server, owner }, null, 2);
@@ -100,7 +96,7 @@ colors.reset;
                               }
                             });
                           } else {
-                            return;
+                            return
                           }                          
                         }
                       }

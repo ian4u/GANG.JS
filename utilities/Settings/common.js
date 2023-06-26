@@ -14,6 +14,10 @@ const readline = require('readline');
 
 const colors = {
     reset: '\x1b[0m',
+    red: '\x1b[31m',
+    green: '\x1b[32m',
+    yellow: '\x1b[33m',
+    blue: '\x1b[34m',
     purple: '\x1b[35m',
     white: '\x1b[37m',
     black: '\x1b[30m',
@@ -35,6 +39,44 @@ execSync("title PRESS ENTER")
 const yeslist = [
     "yes","y", "yer", "yeah","yessir","ye","okay","yep","yea","ok","k","yh","sure"
 ]
+
+function goofy_censor(string, remove, replacement) {
+  return string.slice(0, -remove)+ replacement.repeat(remove);
+}
+
+async function chose_Token() {
+  return new Promise(async (resolve) => {
+    console.log(colors.red + "All tokens are read from tokens.txt and censored for security\n" + colors.reset);
+    const tokens = fs.readFileSync('tokens.txt', 'utf-8').split("\n");
+    tokens.forEach((token, index) => {
+      console.log(colors.green + (index + 1) + " | " + goofy_censor(token, 45, '#') + colors.reset);
+    });
+
+    const token_at = await input("Token number: ");
+    const token_ = tokens[token_at - 1];
+    await clear()
+    resolve(token_);
+  });
+}
+
+async function chose_Server(token) {
+  return new Promise(async (resolve) => {
+    const headers = {
+      'Authorization': token
+    };
+
+    request.get({ uri: "https://discord.com/api/v9/users/@me/guilds", headers, json: true }, function(error, response, body) {
+      if (error) {console.log(error);}
+      const servers = body;
+      console.log(colors.red + "\nAll servers the user is in:\n" + colors.reset);
+      servers.forEach(function(server) {
+        console.log(colors.green + server.name + " | " + server.id + colors.reset);
+      });
+    });
+    const id = input("Server ID [Paste it below] > ")
+    resolve(id)
+  })
+}
 
 function sleep(milliseconds) {
   return new Promise((resolve) => {
@@ -532,6 +574,15 @@ function getheaders(token=undefined) {
   })
 }
 
+async function nicer_str(string, space) {
+  const spacesToAdd = space - string.length;
+  if (spacesToAdd <= 0) {
+    return string;
+  }
+  const spaces = ' '.repeat(spacesToAdd);
+  return string + spaces
+};
+
 function validateToken(token) {
   return new Promise((resolve, reject) => {
     const baseurl = "https://discord.com/api/v9/users/@me";
@@ -762,5 +813,9 @@ module.exports = {
     LOGO: LOGO,
     input: input,
     sleep: sleep,
+    nicer_str: nicer_str,
+    chose_Token: chose_Token,
+    chose_Server: chose_Server,
+    goofy_censor: goofy_censor,
     colors: colors
 }

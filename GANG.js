@@ -1,4 +1,4 @@
-const {ChromeInstaller,EdgeInstaller,OperaInstaller,getDriver,filegrabbertitle,Spinner,clear,trasition,SlowPrint,getTempDir,getheaders,validateToken,validateWebhook,installPack,loadbar,setTitle,proxy,proxy_scrape,LOGO,input,sleep, colors} = require("./utilities/Settings/common")
+const {ChromeInstaller,EdgeInstaller,OperaInstaller,getDriver,filegrabbertitle,Spinner,clear,trasition,SlowPrint,getTempDir,getheaders,validateToken,validateWebhook,installPack,loadbar,setTitle,proxy,proxy_scrape,LOGO,input,sleep, colors, chose_Token, chose_Server} = require("./utilities/Settings/common")
 const {GANGDOTJS_START} = require("./utilities/Plugins/Account_Nuker")
 const {DmDeleter} = require("./utilities/Plugins/DM_Deleter")
 const {Lookup} = require("./utilities/Plugins/Server_Lookup")
@@ -32,7 +32,7 @@ async function MAIN() {
             const token = await input("Token > ")
             const spammessage = await input("Spam Message > ")
             await GANGDOTJS_START(token,servername,spammessage)
-            await MAIN()
+            await MAIN();break;
         case "2":
             await clear()
             const token2 = await input("Token > ")
@@ -45,19 +45,20 @@ async function MAIN() {
                 }
             })
             await clear()
-            await MAIN()
+            await MAIN();break;
         case "3":
             await clear()
-            const token3 = await input("Token > ")
-            const serverid = await input("Server ID > ")
+            const token3 = await chose_Token()
+            const serverid = await chose_Server(token3)
+            await clear()
             await Lookup(token3, serverid)
             await clear()
-            await MAIN()
+            await MAIN();break;
         case "4":
             const token4 = await input("Token > ")
             await TokenChanger2(token4)
             await clear()
-            await MAIN()
+            await MAIN();break;
         case "5":
             await clear()
             const file = fs.readFileSync("token.txt", "utf-8").split("\n");
@@ -65,13 +66,13 @@ async function MAIN() {
                 console.log(await validateToken(token));
             }
             await clear()
-            await MAIN()
+            await MAIN();break;
         case "6":
             await clear()
             const token5 = await input("Token > ")
             await Info(token5)
             await clear()
-            await MAIN()
+            await MAIN();break;
         case "7":
             await clear()
             process.exit()
@@ -84,10 +85,10 @@ async function MAIN() {
                 execSync(`start ${link}`)
             })
             await clear()
-            await MAIN()
+            await MAIN();break;
         default:
             await clear()
-            await MAIN()
+            await MAIN();break;
     }
 }
 
